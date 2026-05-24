@@ -1,0 +1,6 @@
+/src
+/pkg
+*.zst
+*.gz
+*.pkg.tar.*
+/alsa-ucm-conf
