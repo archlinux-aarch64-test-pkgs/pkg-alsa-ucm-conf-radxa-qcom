@@ -1,0 +1,48 @@
+From e839c3e305cefbaad6ea5acaeaa728ff66f53ee2 Mon Sep 17 00:00:00 2001
+From: Xilin Wu <sophon@radxa.com>
+Date: Mon, 17 Nov 2025 19:07:57 +0800
+Subject: [PATCH] ucm2: Qualcomm: qcs6490: Add DMI match for Radxa Dragon Q6A
+
+Newer versions of the boot firmware of Radxa Dragon Q6A include more
+complete DMI information. Add relevant DMI match to make sure the config
+file can be loaded correctly.
+
+Signed-off-by: Xilin Wu <sophon@radxa.com>
+Co-authored-by: Nascs Fang <nascs@radxa.com>
+---
+ ucm2/Qualcomm/qcs6490/qcs6490.conf | 13 +++++++++++++
+ ucm2/conf.d/qcs6490/qcs6490.conf   |  1 +
+ 2 files changed, 14 insertions(+)
+ create mode 100644 ucm2/Qualcomm/qcs6490/qcs6490.conf
+ create mode 120000 ucm2/conf.d/qcs6490/qcs6490.conf
+
+diff --git a/src/ucm2/Qualcomm/qcs6490/qcs6490.conf b/src/ucm2/Qualcomm/qcs6490/qcs6490.conf
+new file mode 100644
+index 0000000..03cce7d
+--- /dev/null
++++ b/src/ucm2/Qualcomm/qcs6490/qcs6490.conf
+@@ -0,0 +1,13 @@
++Syntax 4
++
++Define.DMI_info "${sys:devices/virtual/dmi/id/board_vendor}-${sys:devices/virtual/dmi/id/product_family}-${sys:devices/virtual/dmi/id/board_name}"
++
++If.RADXA_DRAGON_Q6A {
++	Condition {
++		Type RegexMatch
++		String "${var:DMI_info}"
++		Regex "^Radxa Computer Co\\., Ltd.-Dragon-Radxa Dragon Q6A$"
++	}
++	True.Include.radxaq6a.File "/Qualcomm/qcs6490/QCS6490-Radxa-Dragon-Q6A/QCS6490-Radxa-Dragon-Q6A.conf"
++	False.Warning "QCS6490 - ${var:DMI_info} model not supported"
++}
+diff --git a/src/ucm2/conf.d/qcs6490/qcs6490.conf b/src/ucm2/conf.d/qcs6490/qcs6490.conf
+new file mode 120000
+index 0000000..7bde1dc
+--- /dev/null
++++ b/src/ucm2/conf.d/qcs6490/qcs6490.conf
+@@ -0,0 +1 @@
++../../Qualcomm/qcs6490/qcs6490.conf
+\ No newline at end of file
+-- 
+2.52.0
+
